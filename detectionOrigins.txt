@@ -1,0 +1,3 @@
+train3: /home/ubuntu/output/train3/train/large_robot_train/generalized_rcnn/model_final.pkl
+train2: /home/ubuntu/output/train2/train/large_robot_train/generalized_rcnn/model_iter39999.pkl
+train: /home/ubuntu/output/train/robot_train/generalized_rcnn/model_final.pkl
