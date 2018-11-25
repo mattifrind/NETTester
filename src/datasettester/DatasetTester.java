@@ -6,12 +6,10 @@
 package datasettester;
 
 import datasettester.ui.PrecisionRecall;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.util.Pair;
@@ -21,89 +19,9 @@ import javafx.util.Pair;
  * @author matti
  */
 public class DatasetTester {
+    
+    private final double iou_thresh = 0.1;
 
-    private Map<String, Image> parseDetections(BufferedReader detections) throws IOException {
-        HashMap<String, Image> images = new HashMap<>();
-        String line;
-        ParseState state = ParseState.OTHER;
-        Image img = null;
-        int pos;
-        StringBuffer arrayContent = null;
-        String probability = null;
-        lineLoop: while ((line = detections.readLine()) != null) {
-            String tempLine = line.trim();
-            pos = 0;
-            while (pos < tempLine.length()) {
-                switch (state) {
-                    case BOUNDINGBOX:
-                        char currChar = tempLine.charAt(pos);
-                        if (currChar == '[') {
-                            arrayContent = new StringBuffer();
-                        } else if(currChar == ']') {
-                            state = ParseState.PROBABILITY;
-                        } else if(currChar == '|') {
-                            state = ParseState.OTHER;
-                            if(img != null) {
-                                images.put(img.getName(), img);
-                                img = null;
-                            }
-                        } else if (arrayContent != null) {
-                            arrayContent.append(currChar);
-                        }
-                        break;
-                    case PROBABILITY:
-                        probability = tempLine;
-                        state = ParseState.CLASZ;
-                        continue lineLoop;
-                    case CLASZ:
-                        String[] values = tempLine.split("\\s+");
-                        img.addBBox(BoundingBox.of(arrayContent.toString(), probability, values[0]));
-                        state = ParseState.BOUNDINGBOX;
-                        continue lineLoop;
-                    case OTHER:
-                        if (tempLine.contains("/")) continue lineLoop;
-                        if (img == null) {
-                            img = new Image(tempLine);
-                            state = ParseState.BOUNDINGBOX;
-                            continue lineLoop;
-                        }
-                        break;
-                }
-                pos++;
-            }
-        }
-        return images;
-    }
-    
-    
-    public Map<String, Image> readDetections() throws IOException {
-        try(BufferedReader traindata = new BufferedReader(new FileReader("data//train3_detectionsNEW.txt"))) {
-            return parseDetections(traindata);
-        }
-    }
-    
-    private Map<String, Image> parseTrainData(BufferedReader data) throws IOException {
-        Map<String, Image> images = new HashMap<>();
-        String line = "";
-        while ((line = data.readLine()) != null) {
-            Image img = Image.of(line);
-            if (img == null) continue;
-            Image found = images.get(img.getName());
-            if (found == null) {
-                images.put(img.getName(), img);
-            } else {
-                found.merge(img);
-            }
-        }
-        return images;
-    }
-    
-    public Map<String, Image> readTrain() throws FileNotFoundException, IOException {
-        try(BufferedReader traindata = new BufferedReader(new FileReader("data//large_robot.csv"))) {
-            return parseTrainData(traindata);
-        }
-    }
-    
     public void computeMean(Map<String, Image> detection, Map<String, Image> test) {
         computeAPScore(detection, test);
     }
@@ -111,77 +29,83 @@ public class DatasetTester {
     private void computeAPScore(Map<String, Image> detection, Map<String, Image> test) {
         List<Pair<Double, Double>> ballResult = new ArrayList<>();
         List<Pair<Double, Double>> footResult = new ArrayList<>();
-        detection.values().stream().filter(i -> !i.getName().startsWith("COCO")).forEach((img) -> {
-            Image valImg = test.get(img.getName());
-            System.out.println("compute: " +  img.getName());
-            for (double i = 0.0; i < 1; i+=0.05) {
-                addPrecRecall(ballResult, img, valImg, "ball", i);
-                addPrecRecall(footResult, img, valImg, "foot", i);
-            }
-        });
+        for (double i = 0.3; i < 1; i+=0.02) {
+            List<ImageStatistic> ballStatistic = new ArrayList<>();
+            List<ImageStatistic> footStatistic = new ArrayList<>();
+            final double thresh = i;
+            detection.values().stream().filter(img -> !img.getName().startsWith("COCO")).forEach((img) -> {
+                Image valImg = test.get(img.getName());
+                System.out.println("compute: " +  img.getName());
+                    addPrecRecall(ballStatistic, img, valImg, "ball", thresh);
+                    addPrecRecall(footStatistic, img, valImg, "foot", thresh);
+            });
+            ballResult.add(computePrecRecall(ballStatistic));
+            footResult.add(computePrecRecall(footStatistic));
+        }
         PrecisionRecall.main(ballResult, new String[0]);
     }
     
-    private void addPrecRecall(List<Pair<Double, Double>> list, Image img, Image valImg, String clasz, double thresh) {
-        Pair<Double, Double> item = computePrecRecall(img, valImg, clasz, thresh);
+    private void addPrecRecall(List<ImageStatistic> list, Image img, Image valImg, String clasz, double thresh) {
+        ImageStatistic item = computeImageStatistics(img, valImg, clasz, thresh);
         if (item != null) list.add(item);
     }
     
     /**
-     * compute precision and recall value.
-     * @param img detected image
-     * @param valImg ground truth image
+     * compute ImageStatistic of a detection and a GroundTruth Image;
+     * @param detImg detected image
+     * @param gtImg ground truth image
      * @param selectedClass
      * @param thresh
-     * @return Pair of recall and precision. if no object then null.
+     * @return ImageStatistic with counts of tp, fp and fn.
      */
-    protected Pair<Double, Double> computePrecRecall(Image img, Image valImg, String selectedClass, double thresh) {
+    protected ImageStatistic computeImageStatistics(Image detImg, Image gtImg, String selectedClass, double thresh) {
         int false_negative = 0, false_positive = 0, true_positive = 0;
         Classificator cls = new Classificator();
-        for (BoundingBox box : img.getBbox()) {
-            BoundingBox groundTruth = findBoundingBox(box, valImg);
-            switch(cls.classify(groundTruth, box, selectedClass, thresh)) {
-                case FALSE_NEGATIVE:
-                    false_negative++;
-                    break;
-                case FALSE_POSITIVE:
-                    false_positive++;
-                    break;
-                case TRUE_POSITIVE:
-                    true_positive++;
-                    break;
-                case DEFAULT:
-                    break;
+        //found - key BoundingBox, value Detection mit IoU
+        IdentityHashMap<BoundingBox, Pair<BoundingBox, Double>> found = new IdentityHashMap<>();
+        
+        //für jede Groundtruth die beste (IoU) Detection.
+        for (BoundingBox det : detImg.getBbox()) {
+            if(!det.getClasz().equalsIgnoreCase(selectedClass)) continue;
+            Pair<BoundingBox, Double> groundTruth = cls.findBoundingBox(det, gtImg);
+            if (groundTruth == null) {
+                if (det.getProb() >= thresh) false_positive++;
+                continue;
+            }
+            Pair<BoundingBox, Double> pair = found.get(groundTruth.getKey());
+            if (pair == null) {
+                found.put(groundTruth.getKey(), new Pair(det, groundTruth.getValue()));
+            } else {
+                //ersetzen, wenn ehemalige beste Detection einen zu geringen prob hat oder IoU größer ist
+                if (pair.getValue() < groundTruth.getValue() || found.get(groundTruth.getKey()).getKey().getProb() < thresh) {
+                    found.put(groundTruth.getKey(), new Pair(det, groundTruth.getValue()));
+                }
             }
         }
-        false_negative = (int) valImg.countBoxes(selectedClass) - true_positive;
-        if ((true_positive + false_positive) == 0) {
-            return null;
+        
+        for (Pair<BoundingBox, Double> pair : found.values()) {
+            if (pair.getKey().getProb() > thresh && pair.getValue() > iou_thresh) {
+                true_positive++;
+            } else if (pair.getKey().getProb() > thresh) {
+                false_positive++;
+            }
         }
-        if ((true_positive + false_negative) == 0) {
-            return null;
+        false_negative = (int) gtImg.countBoxes(selectedClass) - true_positive;
+        return new ImageStatistic(true_positive, false_positive, false_negative);
+    }
+    
+    private Pair<Double, Double> computePrecRecall(List<ImageStatistic> list) {
+        int true_positive = 0;
+        int false_positive = 0;
+        int false_negative = 0;
+        for (ImageStatistic imageStatistic : list) {
+            true_positive += imageStatistic.getTrue_positive();
+            false_positive += imageStatistic.getFalse_positive();
+            false_negative += imageStatistic.getFalse_negative();
         }
         double precision = (double) true_positive / (double) (true_positive + false_positive);
         double recall = (double) true_positive / (double) (true_positive + false_negative);
         return new Pair<>(recall, precision);
-    }
-    
-    /**
-     * Findet korrespondierende Ground Truth BoundingBox mittels der IoU.
-     * @return 
-     */
-    private BoundingBox findBoundingBox(BoundingBox box, Image detImg) {
-        double maxIoU = 0.0;
-        BoundingBox maxBox = null;
-        Iou algorithm = new Iou();
-        for (BoundingBox detBox : detImg.getBbox()) {
-            double iou = algorithm.compute(detBox, box);
-            if (iou > maxIoU) {
-                maxIoU = iou;
-                maxBox = detBox;
-            }
-        }
-        return maxBox;
     }
     
     /**
@@ -214,10 +138,10 @@ public class DatasetTester {
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
         try {
-            DatasetTester tester = new DatasetTester();
-            Map<String, Image> testData = tester.readTrain();
-            Map<String, Image> detectionData = tester.readDetections();
-            tester.computeMean(detectionData, testData);
+            Parser parser = new Parser();
+            Map<String, Image> testData = parser.readTrain();
+            Map<String, Image> detectionData = parser.readDetections();
+            new DatasetTester().computeMean(detectionData, testData);
             
         } catch (Throwable ex) {
             ex.printStackTrace();

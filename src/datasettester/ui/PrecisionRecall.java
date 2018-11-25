@@ -21,13 +21,14 @@ import javafx.util.Pair;
  */
 public class PrecisionRecall extends Application {
     
-    List<Pair<Double, Double>> liste = new ArrayList<>();
+    static List<Pair<Double, Double>> liste = new ArrayList<>();
     
     @Override
     public void start(Stage primaryStage) {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Number of Month");
+        xAxis.setLabel("recall");
+        yAxis.setLabel("precision");
         //creating the chart
         final LineChart<Number,Number> lineChart = 
                 new LineChart<Number,Number>(xAxis,yAxis);
@@ -39,7 +40,7 @@ public class PrecisionRecall extends Application {
         liste.forEach(e -> {
             series.getData().add(new XYChart.Data(e.getKey(), e.getValue()));
         });
-        
+        lineChart.setCreateSymbols(false);
         lineChart.getData().add(series);  
         
         Scene scene  = new Scene(lineChart,800,600);
@@ -49,12 +50,13 @@ public class PrecisionRecall extends Application {
     }
 
     /**
+     * @param list
      * @param args the command line arguments
      */
     public static void main(List<Pair<Double, Double>> list, String[] args) {
         PrecisionRecall ui = new PrecisionRecall();
-        ui.liste = list;
-        launch(args);
+        liste = list;
+        ui.launch(args);
     }
     
 }

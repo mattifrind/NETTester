@@ -5,6 +5,8 @@
  */
 package datasettester;
 
+import java.awt.Rectangle;
+import java.util.Objects;
 import javafx.util.Pair;
 
 /**
@@ -71,6 +73,21 @@ public class BoundingBox {
         return new Pair<>(getX()+width/2.0, getY()+height/2.0);
     }
     
+    public double distance(BoundingBox box) {
+        Pair<Double, Double> center1 = getCenter();
+        Pair<Double, Double> center2 = box.getCenter();
+        double deltaX = Math.abs(center1.getKey() - center2.getKey());
+        double deltaY = Math.abs(center1.getValue() - center2.getValue());
+        return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+    }
+    
+    /**
+     * erstellt eine Bounding Box aus 2 Punkten (links-oben, rechts-unten)
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
     public BoundingBox(double x1, double y1, double x2, double y2) {
         this(x1, y1, x2, y2, 1, "");
     }
@@ -94,6 +111,20 @@ public class BoundingBox {
         this.clasz= clasz;
     }
     
+    /**
+     * Constructor for usage while parsing foot annotations.
+     * @param rect
+     * @param clasz
+     */
+    public BoundingBox(Rectangle rect) {
+        x = rect.x;
+        y = rect.y;
+        width = rect.width;
+        height = rect.height;
+        prob = 1;
+        this.clasz = "foot";
+    }
+    
     public static BoundingBox of(String line, String probability, String clasz) {
         String[] tempValues = line.trim().split("\\s+");
         if (tempValues.length != 4) {
@@ -105,5 +136,46 @@ public class BoundingBox {
     public BoundingBox(String x, String y, String width, String height, String pb, String clasz) {
         this(Double.valueOf(x), Double.valueOf(y), Double.valueOf(width), Double.valueOf(height), Double.valueOf(pb), clasz);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BoundingBox other = (BoundingBox) obj;
+        if (Double.doubleToLongBits(this.x) != Double.doubleToLongBits(other.x)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.y) != Double.doubleToLongBits(other.y)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.width) != Double.doubleToLongBits(other.width)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.height) != Double.doubleToLongBits(other.height)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.prob) != Double.doubleToLongBits(other.prob)) {
+            return false;
+        }
+        if (!Objects.equals(this.clasz, other.clasz)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
 }

@@ -8,6 +8,7 @@ package datasettester;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -50,7 +51,7 @@ public class Image {
     }
     
     public long countBoxes(String clasz) {
-        return bbox.stream().filter(b -> clasz.equals(b.getClasz())).count();
+        return bbox.stream().filter(b -> clasz.equalsIgnoreCase(b.getClasz())).count();
     }
     
 
@@ -76,7 +77,52 @@ public class Image {
     public static Image of(String line) {
         String[] tempValues = line.split(";");
         if (tempValues.length != 9) return null;
+        if (tempValues[8].equalsIgnoreCase("foot")) {
+            BoundingBox[] boxes = BBoxParser.readBBox2(tempValues[4], tempValues[5], tempValues[6], tempValues[7]);
+            return new Image(tempValues[0].substring(0, line.indexOf(".png")), Arrays.asList(boxes));
+        }
         BoundingBox bb = new BoundingBox(tempValues[4], tempValues[5], tempValues[6], tempValues[7], "1", tempValues[8]);
         return new Image(tempValues[0].substring(0, line.indexOf(".png")), bb);
     }
+    
+    private boolean equals(List<BoundingBox> ls1, List<BoundingBox> ls2) {
+        if (ls1 == ls2) {
+            return true;
+        }
+        if (ls1 == null || ls2 == null) {
+            return false;
+        }
+        if (ls1.size() != ls2.size()) {
+            return false;
+        }
+        for (BoundingBox boundingBox : ls1) {
+            if (!ls2.contains(boundingBox)) return false;
+        }
+        for (BoundingBox boundingBox : ls2) {
+            if (!ls1.contains(boundingBox)) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Image other = (Image) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!equals(this.bbox, other.bbox)) {
+            return false;
+        }
+        return true;
+    }
+
 }
