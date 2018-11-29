@@ -4,15 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/src/datasettester/ui/PrecisionRecall.java</file>
-            <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/test/datasettester/IouTests.java</file>
             <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/src/datasettester/Image.java</file>
             <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/src/datasettester/BoundingBox.java</file>
-            <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/test/datasettester/BoundingBoxTester.java</file>
-            <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/test/datasettester/ImageTest.java</file>
+            <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/src/datasettester/BBoxParser.java</file>
             <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/test/datasettester/ComputePrecRecallTests.java</file>
-            <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/test/datasettester/ClassificatorTests.java</file>
             <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/src/datasettester/DatasetTester.java</file>
-            <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/src/datasettester/Classificator.java</file>
+            <file>file:/J:/Dokumente/Bell/Detectron/DatasetTester/src/datasettester/Parser.java</file>
         </group>
     </open-files>
 </project-private>

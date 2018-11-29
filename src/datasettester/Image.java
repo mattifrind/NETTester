@@ -77,12 +77,17 @@ public class Image {
     public static Image of(String line) {
         String[] tempValues = line.split(";");
         if (tempValues.length != 9) return null;
+        if (tempValues[0].contains("AddionalBallSamples")) return null;
         if (tempValues[8].equalsIgnoreCase("foot")) {
-            BoundingBox[] boxes = BBoxParser.readBBox2(tempValues[4], tempValues[5], tempValues[6], tempValues[7]);
+           double[] metadata = ReadMetadata.readCamAngles(tempValues[0].substring(0, tempValues[0].indexOf(".png")));
+            BoundingBox[] boxes = BBoxParser.readFootBBox(tempValues[4], tempValues[5], tempValues[6], tempValues[7], "foot", metadata);
             return new Image(tempValues[0].substring(0, line.indexOf(".png")), Arrays.asList(boxes));
         }
-        BoundingBox bb = new BoundingBox(tempValues[4], tempValues[5], tempValues[6], tempValues[7], "1", tempValues[8]);
-        return new Image(tempValues[0].substring(0, line.indexOf(".png")), bb);
+        if (tempValues[8].equalsIgnoreCase("ball")) {
+            BoundingBox[] bb = BBoxParser.readBBox1(tempValues[4], tempValues[5], tempValues[6], tempValues[7], "ball");
+            return new Image(tempValues[0].substring(0, line.indexOf(".png")), bb[0]);
+        }
+        return null;
     }
     
     private boolean equals(List<BoundingBox> ls1, List<BoundingBox> ls2) {

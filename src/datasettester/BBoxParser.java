@@ -8,12 +8,47 @@ package datasettester;
 import java.awt.Rectangle;
 
 /**
- *
+ * FROM ANNOTATION CONVERTER
  * @author matti
  */
 public class BBoxParser {
     
     private static final int MIN_LENGTH = 8;
+    
+    public static BoundingBox[] readFootBBox(String x1String, String y1String, String x2String, String y2String, String clasz, double[] metadata) {
+        switch (DatasetTester.ANNOTATION_VERSION) {
+            case 1:
+                return readBBox1(x1String, y1String, x2String, y2String, clasz);
+            case 2:
+                return readBBox2(x1String, y1String, x2String, y2String, clasz);
+            case 3:
+                return readBBox3(x1String, y1String, x2String, y2String, clasz, metadata);
+        }
+        return null;
+    }
+    
+    /**
+     * Parse BBox. Version 1 - both foots
+     * @param x1String
+     * @param y1String
+     * @param x2String
+     * @param y2String
+     * @return Bounding Box
+     */
+    public static BoundingBox[] readBBox1(String x1String, String y1String, String x2String, String y2String, String clasz) {
+        int x1 = Integer.parseInt(x1String),
+                y1 = Integer.parseInt(y1String),
+                x2 = Integer.parseInt(x2String),
+                y2 = Integer.parseInt(y2String),
+                dx = x2 - x1, //xEntfernung
+                dy = y2 - y1, //yEntfernung
+                d = (int) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)); //Entfernung per Satz des Phytagoras
+        Rectangle rect = new Rectangle(x1 + (dx - d) / 2, y1 + (dy - d) / 2, d, d);
+        /*if (!"Ball".equals(split[3]))
+        printBBox(rect, split[0]);*/
+        BoundingBox bbox = new BoundingBox(rect, clasz);
+        return new BoundingBox[]{bbox};
+    }
     
      /**
      * Parse BBox. Version 2 - seperated foots
@@ -23,7 +58,7 @@ public class BBoxParser {
      * @param y2String
      * @return Bounding Box
      */
-    public static BoundingBox[] readBBox2(String x1String, String y1String, String x2String, String y2String) {
+    public static BoundingBox[] readBBox2(String x1String, String y1String, String x2String, String y2String, String clasz) {
         int x1 = Integer.parseInt(x1String),
                 y1 = Integer.parseInt(y1String),
                 x2 = Integer.parseInt(x2String),
@@ -61,12 +96,33 @@ public class BBoxParser {
         }
         //printBBox(rect1, split[0]);
         //printBBox(rect2, split[0]);
-        BoundingBox bbox1 = new BoundingBox(rect1);
-        BoundingBox bbox2 = new BoundingBox(rect2);
+        BoundingBox bbox1 = new BoundingBox(rect1, clasz);
+        BoundingBox bbox2 = new BoundingBox(rect2, clasz);
         return new BoundingBox[]{bbox1, bbox2};
     }
     
     private static Rectangle minBox(int x, int y) {
         return new Rectangle((int) (x-(((double) MIN_LENGTH)/2.0)), (int) (y-(((double) MIN_LENGTH)/2.0)), MIN_LENGTH, MIN_LENGTH);
     }
+    
+    
+    /**
+     * Parse BBox. Version 3 - complete Robot
+     * @param split paramater from csv
+     * @param metadata
+     * @return Bounding Box
+     */
+    public static BoundingBox[] readBBox3(String x1String, String y1String, String x2String, String y2String, String clasz, double[] metadata) {
+        int x1 = Integer.parseInt(x1String),
+                y1 = Integer.parseInt(y1String),
+                x2 = Integer.parseInt(x2String),
+                y2 = Integer.parseInt(y2String);
+        int xpos = (x1 + x2)/2;
+        int ypos = (y1 + y2)/2;
+        int size = (int) Triangulation.getRobotHeight(xpos, ypos, metadata);
+        Rectangle rect = new Rectangle(xpos-size/4, ypos-size, size/2, (int) 1.7 * size);
+        
+        return new BoundingBox[]{new BoundingBox(rect, clasz)};
+    }
+    
 }

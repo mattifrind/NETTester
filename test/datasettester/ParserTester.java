@@ -21,6 +21,9 @@ import org.junit.Test;
  */
 public class ParserTester {
     
+    //DEPRECATED: AdditionalBallSamples werden rausgefiltert.
+    
+    
     @Test
     public void test() throws IOException {
         String inputString = "2017_GermanOpenG1A_AddionalBallSamples_00077143_U.png;1493846696230;tkalbitz;foot;609;203;595;202;foot\n" +
@@ -30,11 +33,11 @@ public class ParserTester {
         Parser ps = new Parser();
         Map<String, Image> result = ps.parseTestData(bf);
         Image img = result.get("2017_GermanOpenG1A_AddionalBallSamples_00077143_U");
-        Image ref = new Image("2017_GermanOpenG1A_AddionalBallSamples_00077143_U", Arrays.asList(BBoxParser.readBBox2("595", "202", "609", "203")));
+        Image ref = new Image("2017_GermanOpenG1A_AddionalBallSamples_00077143_U", Arrays.asList(BBoxParser.readBBox2("595", "202", "609", "203", "foot")));
         assertEquals(ref, img);
         
         img = result.get("2017_GermanOpenG1A_AddionalBallSamples_00077767_L");
-        ref = new Image("2017_GermanOpenG1A_AddionalBallSamples_00077767_L", Arrays.asList(BBoxParser.readBBox2("28", "78", "163", "74")));
+        ref = new Image("2017_GermanOpenG1A_AddionalBallSamples_00077767_L", Arrays.asList(BBoxParser.readBBox2("28", "78", "163", "74", "foot")));
         assertEquals(ref, img);
     }
 }

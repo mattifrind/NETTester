@@ -5,6 +5,7 @@
  */
 package datasettester;
 
+import static datasettester.DatasetTester.DET_FILE;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -36,14 +37,14 @@ public class Parser {
         return images;
     }
 
-    public Map<String, Image> readTrain() throws FileNotFoundException, IOException {
+    public Map<String, Image> readTest() throws FileNotFoundException, IOException {
         try (final BufferedReader traindata = new BufferedReader(new FileReader("data//large_robot.csv"))) {
             return parseTestData(traindata);
         }
     }
 
     public Map<String, Image> readDetections() throws IOException {
-        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//train3_detectionsNEW.txt"))) {
+        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//" + DET_FILE))) {
             return parseDetections(traindata);
         }
     }

@@ -56,6 +56,10 @@ public class BoundingBox {
     public double getProb() {
         return prob;
     }
+    
+    public String getRoundedProbString() {
+        return Math.round(prob*100) + "%";
+    }
 
     public void setProb(double prob) {
         this.prob = prob;
@@ -116,13 +120,13 @@ public class BoundingBox {
      * @param rect
      * @param clasz
      */
-    public BoundingBox(Rectangle rect) {
+    public BoundingBox(Rectangle rect, String clasz) {
         x = rect.x;
         y = rect.y;
         width = rect.width;
         height = rect.height;
         prob = 1;
-        this.clasz = "foot";
+        this.clasz = clasz;
     }
     
     public static BoundingBox of(String line, String probability, String clasz) {
