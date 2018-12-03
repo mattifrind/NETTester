@@ -1,28 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package datasettester;
+package datasettester.parsing;
 
+import datasettester.BoundingBox;
+import datasettester.DatasetTester;
 import java.awt.Rectangle;
 
 /**
  * FROM ANNOTATION CONVERTER
- * @author matti
+ * Parses the given coordinates in the needed bounding boxes.
+ * @author Matti J. Frind
  */
 public class BBoxParser {
     
     private static final int MIN_LENGTH = 8;
     
     public static BoundingBox[] readFootBBox(String x1String, String y1String, String x2String, String y2String, String clasz, double[] metadata) {
-        switch (DatasetTester.ANNOTATION_VERSION) {
+        switch (DatasetTester.annotationVersion) {
             case 1:
                 return readBBox1(x1String, y1String, x2String, y2String, clasz);
             case 2:
                 return readBBox2(x1String, y1String, x2String, y2String, clasz);
             case 3:
-                return readBBox3(x1String, y1String, x2String, y2String, clasz, metadata);
+                if (DatasetTester.version3Availability) {
+                    return readBBox3(x1String, y1String, x2String, y2String, clasz, metadata);
+                } else {
+                    return readBBox2(x1String, y1String, x2String, y2String, clasz);
+                }
         }
         return null;
     }
@@ -108,7 +110,6 @@ public class BBoxParser {
     
     /**
      * Parse BBox. Version 3 - complete Robot
-     * @param split paramater from csv
      * @param metadata
      * @return Bounding Box
      */

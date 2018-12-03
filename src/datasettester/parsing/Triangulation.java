@@ -1,5 +1,10 @@
-package datasettester;
+package datasettester.parsing;
 
+/**
+ * Triangulates the robot height according to the settings and 
+ * the metadata created by the ReadMetada.java.
+ * @author HTWK Leipzig
+ */
 public class Triangulation{
 	private static final int CAM_WIDTH=640;
 	private static final int CAM_HEIGHT=480;
@@ -23,7 +28,7 @@ public class Triangulation{
             return Math.max(7,BALL_SIZE/distCam+SIZE_OFFSET);//ballradius in px, wenn 1 Meter entfernt
 	}
 	
-	public static Coord projectPoint(double x, double y){
+	private static Coord projectPoint(double x, double y){
             Coord p=new Coord(x,y);
             double sRoll=Math.sin(-rollRad); //kein -
             double cRoll=Math.cos(-rollRad); //kein -
@@ -47,18 +52,4 @@ public class Triangulation{
 		double fac=BOT_HEIGHT/pRot.z;
 		return new Coord(pRot.x*fac,pRot.y*fac,0);
 	}
-}
-
-class Coord {
-    double x, y, z;
-    public Coord(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-    
-    public Coord(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
 }

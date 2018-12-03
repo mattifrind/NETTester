@@ -1,17 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datasettester;
 
 import java.awt.Rectangle;
-import java.util.Objects;
 import javafx.util.Pair;
 
 /**
- *
- * @author matti
+ * Class representing a bounding box in an image.
+ * @author Matti J. Frind
  */
 public class BoundingBox {
     private double x = 0.0;
@@ -77,6 +71,11 @@ public class BoundingBox {
         return new Pair<>(getX()+width/2.0, getY()+height/2.0);
     }
     
+    /**
+     * Computes the distance from this box to another by using the center point.
+     * @param box another bounding box.
+     * @return distance
+     */
     public double distance(BoundingBox box) {
         Pair<Double, Double> center1 = getCenter();
         Pair<Double, Double> center2 = box.getCenter();
@@ -86,16 +85,27 @@ public class BoundingBox {
     }
     
     /**
-     * erstellt eine Bounding Box aus 2 Punkten (links-oben, rechts-unten)
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
+     * Creates a bounding box from two points with a probality of 1 and no class.
+     * left-top and right-bottom corners
+     * @param x1 point 1 x value
+     * @param y1 point 1 y value
+     * @param x2 point 2 x value
+     * @param y2 point 2 y value
      */
     public BoundingBox(double x1, double y1, double x2, double y2) {
         this(x1, y1, x2, y2, 1, "");
     }
     
+    /**
+     * Creates a bounding box from two points with a given probality and a class.
+     * left-top and right-bottom corners
+     * @param x1 point 1 x value
+     * @param y1 point 1 y value
+     * @param x2 point 2 x value
+     * @param y2 point 2 y value
+     * @param probability from 0 to 1
+     * @param clasz ball or foot
+     */
     public BoundingBox(double x1, double y1, double x2, double y2, double probability, String clasz) {
         if (x1 < x2) {
             x = x1;
@@ -117,8 +127,9 @@ public class BoundingBox {
     
     /**
      * Constructor for usage while parsing foot annotations.
+     * Creates a bounding box from a rectangle and a class.
      * @param rect
-     * @param clasz
+     * @param clasz ball or foot
      */
     public BoundingBox(Rectangle rect, String clasz) {
         x = rect.x;
@@ -129,6 +140,14 @@ public class BoundingBox {
         this.clasz = clasz;
     }
     
+    /**
+     * Creates a new bounding box of a input line while parsing.
+     * left-top and right-bottom corners
+     * @param line for example " 72.00218  87.97475 476.6844  432.35834"
+     * @param probability from 0 to 1
+     * @param clasz ball or foot
+     * @return new bounding box with the given properties
+     */
     public static BoundingBox of(String line, String probability, String clasz) {
         String[] tempValues = line.trim().split("\\s+");
         if (tempValues.length != 4) {
@@ -137,8 +156,19 @@ public class BoundingBox {
         return new BoundingBox(tempValues[0], tempValues[1], tempValues[2], tempValues[3], probability, clasz);
     }
     
-    public BoundingBox(String x, String y, String width, String height, String pb, String clasz) {
-        this(Double.valueOf(x), Double.valueOf(y), Double.valueOf(width), Double.valueOf(height), Double.valueOf(pb), clasz);
+    /**
+     * Creates a bounding box from two points with a given probality and a class
+     * in a string format.
+     * left-top and right-bottom corners
+     * @param x1 point 1 x value
+     * @param y1 point 1 y value
+     * @param x2 point 2 x value
+     * @param y2 point 2 y value
+     * @param pb probability from 0 to 1
+     * @param clasz ball or foot
+     */
+    public BoundingBox(String x1, String y1, String x2, String y2, String pb, String clasz) {
+        this(Double.valueOf(x1), Double.valueOf(y1), Double.valueOf(x2), Double.valueOf(y2), Double.valueOf(pb), clasz);
     }
 
     @Override
@@ -174,12 +204,11 @@ public class BoundingBox {
         if (Double.doubleToLongBits(this.prob) != Double.doubleToLongBits(other.prob)) {
             return false;
         }
-        if (!Objects.equals(this.clasz, other.clasz)) {
-            return false;
-        }
-        return true;
+        return clasz.equalsIgnoreCase(other.clasz);
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return getX() + "," + getY() + "," + getWidth() + "," + getHeight();
+    }
 }

@@ -1,25 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datasettester;
 
 import javafx.util.Pair;
 
 /**
  *
- * @author matti
+ * @author Matti J. Frind
  */
 public class Classificator {
     
     /**
-     * Klassifiziert eine Erkennung in FALSE_NEGATIVE, TRUE_NEGATIVE, TRUE_POSITIVE, FALSE_POSITIVE
-     * @param groundTruth erkannte Bounding Box
-     * @param box Ground Thruth Bounding Box
-     * @param selectedClass zu evaluierende Klasse
-     * @param thresh
-     * @return 
+     * Classifies a detection in FALSE_NEGATIVE, TRUE_NEGATIVE, TRUE_POSITIVE, FALSE_POSITIVE.
+     * @param groundTruth detected bounding box
+     * @param box ground thruth bounding box
+     * @param selectedClass class which will be evaluated
+     * @param thresh probability threshhold
+     * @return evaluation class of the detection
      */
     public Classification classify(BoundingBox groundTruth, BoundingBox box, String selectedClass, double thresh) {
         if (box.getProb() <= 0.1) return Classification.DEFAULT;
@@ -45,10 +40,11 @@ public class Classificator {
     }
     
     /**
-     * Findet korrespondierende Ground Truth BoundingBox mittels der IoU.
-     * @param box
-     * @param gtImg
-     * @return 
+     * Finds the corresponding ground truth bounding box using the IoU
+     * @param box detection bounding box
+     * @param gtImg image containing the ground truth bounding boxes
+     * @return Pair of the ground truth bounding box and his IoU, null if no
+     * bounding box found
      */
     public Pair<BoundingBox, Double> findBoundingBox(BoundingBox box, Image gtImg) {
         double maxIoU = 0.0;

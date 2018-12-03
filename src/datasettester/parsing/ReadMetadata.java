@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package datasettester;
+package datasettester.parsing;
 
-import static datasettester.DatasetTester.IMAGE_DIRECTORY;
+import datasettester.DatasetTester;
 import static datasettester.DatasetTester.PNG_IMAGE_DIRECTORY;
 import java.io.File;
 import java.util.Iterator;
@@ -17,17 +12,22 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
- *
- * @author matti
+ * Reads the camera angles from the png image files.
+ * @author HTWK Leipzig
  */
 public class ReadMetadata {
     public static int errors;
     
+    /**
+     * Reads the camera angles from the png image files.
+     * @param filename
+     * @return array of the different camera values
+     */
     public static double[] readCamAngles(String filename) {
         double pitch=Double.NaN;
         double roll=Double.NaN;
         try {
-            File file = new File(PNG_IMAGE_DIRECTORY + filename+ ".png");
+            File file = new File(PNG_IMAGE_DIRECTORY + filename + ".png");
             ImageInputStream iis = ImageIO.createImageInputStream(file);
             try {
                 Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
@@ -53,11 +53,12 @@ public class ReadMetadata {
                 iis.close();
             } catch (IllegalArgumentException ex) {
                 errors++;
-                System.err.print(ex);
+                //System.err.print(ex);
+                DatasetTester.version3Availability = false;
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            DatasetTester.version3Availability = false;
         }
         if(pitch==pitch&&roll==roll){
             //camAnglesAvailable=true;

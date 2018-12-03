@@ -1,18 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datasettester;
 
+import datasettester.parsing.ReadMetadata;
+import datasettester.parsing.BBoxParser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 /**
- *
- * @author matti
+ * Represents an Image with a name an a List of bounding boxes.
+ * @author Matti J. Frind
  */
 public class Image {
    private String name = "";
@@ -50,6 +47,11 @@ public class Image {
         addBBox(image.getBbox());
     }
     
+    /**
+     * Counts the bounding boxes of a given clasz.
+     * @param clasz Class which the bounding boxes have to equal.
+     * @return count of the bounding boxes of a given class
+     */
     public long countBoxes(String clasz) {
         return bbox.stream().filter(b -> clasz.equalsIgnoreCase(b.getClasz())).count();
     }
@@ -69,10 +71,10 @@ public class Image {
     }
     
     /**
-     * Parse these values:
+     * Parses these values into an image:
      * 2017_GermanOpenG1E_Gargamel_00229820_U.png;1493924792341;tkalbitz;Ball;280;293;318;244;Ball
      * @param line to be parsed
-     * @return
+     * @return new Image from a String input line
      */
     public static Image of(String line) {
         String[] tempValues = line.split(";");
@@ -128,6 +130,11 @@ public class Image {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return getName() + getBbox();
     }
 
 }

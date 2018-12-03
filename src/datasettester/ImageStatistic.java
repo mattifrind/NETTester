@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datasettester;
 
 /**
- *
- * @author matti
+ * Represents the counts of the detection classifications of an image 
+ * or a list of images.
+ * @author Matti J. Frind
  */
 public class ImageStatistic {
     private int false_negative = 0;

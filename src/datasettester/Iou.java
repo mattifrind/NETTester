@@ -1,23 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datasettester;
 
 /**
- * Berechnet die intersection over union.
+ * Computes the Intersection over Union (IoU).
  *
- * @author matti
+ * @author Matti J. Frind
  */
 public class Iou {
 
     /**
-     * Berechnet den iou Wert für 2 boxen.
+     * Computes the IoU for 2 bounding boxes.
      * 
-     * @param box1
-     * @param box2
-     * @return 
+     * @param box1 bounding box
+     * @param box2 bounding box
+     * @return IoU value
      */
     public double compute(BoundingBox box1, BoundingBox box2) {
         double xA = Math.max(box1.getX(), box2.getX());

@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package datasettester;
+package datasettester.parsing;
 
-import static datasettester.DatasetTester.DET_FILE;
+import datasettester.BoundingBox;
+import datasettester.DatasetTester;
+import datasettester.Image;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,12 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
- * @author matti
+ * Contains all functions for parsing the input data in the used data format
+ * @author Matti J. Frind
  */
 public class Parser {
 
-    Map<String, Image> parseTestData(BufferedReader data) throws IOException {
+    public Map<String, Image> parseTestData(BufferedReader data) throws IOException {
         Map<String, Image> images = new HashMap<>();
         String line = "";
         while ((line = data.readLine()) != null) {
@@ -37,14 +34,25 @@ public class Parser {
         return images;
     }
 
+    /**
+     * Parses the test data in a Map of the name of the image and the image itself.
+     * @return Map of the names of the images and the images themselves
+     * @throws java.io.FileNotFoundException
+     * @throws IOException
+     */
     public Map<String, Image> readTest() throws FileNotFoundException, IOException {
-        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//large_robot.csv"))) {
+        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//" + DatasetTester.TEST_FILE))) {
             return parseTestData(traindata);
         }
     }
 
+    /**
+     * Parses the detections data in a Map of the name of the image and the image itself.
+     * @return Map of the names of the images and the images themselves
+     * @throws IOException
+     */
     public Map<String, Image> readDetections() throws IOException {
-        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//" + DET_FILE))) {
+        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//" + DatasetTester.DET_FILE))) {
             return parseDetections(traindata);
         }
     }

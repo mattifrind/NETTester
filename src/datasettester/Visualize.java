@@ -1,4 +1,3 @@
-
 package datasettester;
 
 import static datasettester.DatasetTester.IMAGE_DIRECTORY;
@@ -17,7 +16,9 @@ import java.util.List;
 
 /**
  * FROM ANNOTATION CONVERTER
- * @author matti
+ * Visualizes detection and ground truth bounding boxes with a selected class
+ * for debug reasons.
+ * @author Matti J. Frind
  */
 public class Visualize {
     

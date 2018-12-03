@@ -1,14 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datasettester;
 
 /**
- *
- * @author matti
+ * Contains the 4 possible evaluation states
+ * @author Matti J. Frind
  */
 public enum Classification {
-    TRUE_POSITIVE, FALSE_POSITIVE, FALSE_NEGATIVE, DEFAULT; 
+
+    /**
+     * Represents a correct detection.
+     */
+    TRUE_POSITIVE, 
+
+    /**
+     * Represents a false detection, which was classified as true.
+     */
+    FALSE_POSITIVE, 
+
+    /**
+     * Represents a false detection, which was classified as false.
+     */
+    FALSE_NEGATIVE, 
+
+    /**
+     * Default state.
+     */
+    DEFAULT; 
 }

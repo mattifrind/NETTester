@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datasettester.ui;
 
+import datasettester.PrecRecResult;
+import datasettester.Result;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -25,16 +22,15 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import javax.imageio.ImageIO;
 
 /**
  *
- * @author matti
+ * @author Matti J. Frind
  */
 public class PrecisionRecall extends Application {
     
-    static List<Pair<List<Pair<Double, Double>>, List<Pair<Double, Double>>>> liste = null;
+    private static List<Result> liste = null;
     
     @Override
     public void start(Stage primaryStage) {
@@ -46,6 +42,11 @@ public class PrecisionRecall extends Application {
         primaryStage.show();
     }
     
+    /**
+     * Creates a Tab containing the chart with the ball data and a button,
+     * which saves the chart.
+     * @return chart-tab
+     */
     private Tab getBallTab() {
         LineChart ball = createLineChart(getBallData(), "ball");
         Button btnBall = new Button("save Image");
@@ -67,6 +68,11 @@ public class PrecisionRecall extends Application {
         return ballTap;
     }
     
+    /**
+     * Creates a Tab containing the chart with the foot data and a button,
+     * which saves the chart.
+     * @return chart-tab
+     */
     private Tab getFootTab() {
         LineChart foot = createLineChart(getFootData(), "foot");
         Button btnFoot = new Button("save Image");
@@ -88,7 +94,13 @@ public class PrecisionRecall extends Application {
         return footTap;
     }
     
-    private LineChart createLineChart(List<List<Pair<Double, Double>>> values, String title) {
+    /**
+     * Computes a line chart with values from PrecRecResult list and a title
+     * @param values
+     * @param title
+     * @return LineChart with the given values
+     */
+    private LineChart createLineChart(List<PrecRecResult> values, String title) {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("recall");
@@ -107,11 +119,11 @@ public class PrecisionRecall extends Application {
         return lineChart;
     }
     
-    private void addBallSeries(LineChart chart, List<List<Pair<Double, Double>>> values) {
+    private void addBallSeries(LineChart chart, List<PrecRecResult> values) {
         //IoU 0.1
         XYChart.Series series = new XYChart.Series();
         series.setName("IoU=0%");
-        values.get(0).forEach(e -> {
+        values.get(0).getPrecRecResult().forEach(e -> {
             series.getData().add(new XYChart.Data(e.getKey(), e.getValue()));
         });
         chart.getData().add(series);  
@@ -119,7 +131,7 @@ public class PrecisionRecall extends Application {
         //IoU 0.2
         XYChart.Series series2 = new XYChart.Series();
         series2.setName("IoU=20%");
-        values.get(1).forEach(e -> {
+        values.get(1).getPrecRecResult().forEach(e -> {
             series2.getData().add(new XYChart.Data(e.getKey(), e.getValue()));
         });
         chart.getData().add(series2); 
@@ -127,41 +139,47 @@ public class PrecisionRecall extends Application {
         //IoU 0.3
         XYChart.Series series3 = new XYChart.Series();
         series3.setName("IoU=30%");
-        values.get(2).forEach(e -> {
+        values.get(2).getPrecRecResult().forEach(e -> {
             series3.getData().add(new XYChart.Data(e.getKey(), e.getValue()));
         });
         chart.getData().add(series3); 
     }
     
-    private void addFootSeries(LineChart chart, List<List<Pair<Double, Double>>> values) {
+    private void addFootSeries(LineChart chart, List<PrecRecResult> values) {
         //IoU 0.1
         XYChart.Series series = new XYChart.Series();
         series.setName("IoU=0");
-        values.get(0).forEach(e -> {
+        values.get(0).getPrecRecResult().forEach(e -> {
             series.getData().add(new XYChart.Data(e.getKey(), e.getValue()));
         });
         chart.getData().add(series);  
         //IoU 0.3
         XYChart.Series series2 = new XYChart.Series();
         series2.setName("IoU=0.3");
-        values.get(2).forEach(e -> {
+        values.get(2).getPrecRecResult().forEach(e -> {
             series2.getData().add(new XYChart.Data(e.getKey(), e.getValue()));
         });
         chart.getData().add(series2); 
     }
     
-    private List<List<Pair<Double, Double>>> getBallData() {
-        List<List<Pair<Double, Double>>> balldata = new LinkedList<>();
+    /**
+     * @return List with the PrecRecResult of the ball class
+     */
+    private List<PrecRecResult> getBallData() {
+        List<PrecRecResult> balldata = new LinkedList<>();
         liste.forEach(e -> {
-            balldata.add(e.getKey());
+            balldata.add(e.getBallResult());
         });
         return balldata;
     }
     
-    private List<List<Pair<Double, Double>>> getFootData() {
-        List<List<Pair<Double, Double>>> footdata = new LinkedList<>();
+    /**
+     * @return List with the PrecRecResult of the foot class
+     */
+    private List<PrecRecResult> getFootData() {
+        List<PrecRecResult> footdata = new LinkedList<>();
         liste.forEach(e -> {
-            footdata.add(e.getValue());
+            footdata.add(e.getFootResult());
         });
         return footdata;
     }
@@ -169,7 +187,7 @@ public class PrecisionRecall extends Application {
     /**
      * @param list
      */
-    public static void start(List<Pair<List<Pair<Double, Double>>, List<Pair<Double, Double>>>> list) {
+    public static void start(List<Result> list) {
         PrecisionRecall ui = new PrecisionRecall();
         liste = list;
         ui.launch(null);
