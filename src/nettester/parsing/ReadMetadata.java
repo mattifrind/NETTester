@@ -1,7 +1,7 @@
-package datasettester.parsing;
+package nettester.parsing;
 
-import datasettester.DatasetTester;
-import static datasettester.DatasetTester.PNG_IMAGE_DIRECTORY;
+import nettester.DatasetTester;
+import static nettester.DatasetTester.PNG_IMAGE_DIRECTORY;
 import java.io.File;
 import java.util.Iterator;
 import javax.imageio.ImageIO;

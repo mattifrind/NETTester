@@ -1,4 +1,4 @@
-package datasettester;
+package nettester;
 
 /**
  * Contains the 4 possible evaluation states

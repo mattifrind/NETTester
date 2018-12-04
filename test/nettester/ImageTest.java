@@ -1,5 +1,7 @@
-package datasettester;
+package nettester;
 
+import nettester.Image;
+import nettester.BoundingBox;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;

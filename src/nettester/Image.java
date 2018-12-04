@@ -1,7 +1,7 @@
-package datasettester;
+package nettester;
 
-import datasettester.parsing.ReadMetadata;
-import datasettester.parsing.BBoxParser;
+import nettester.parsing.ReadMetadata;
+import nettester.parsing.BBoxParser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

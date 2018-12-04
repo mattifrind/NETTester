@@ -1,7 +1,7 @@
-package datasettester;
+package nettester;
 
-import datasettester.parsing.Parser;
-import datasettester.ui.PrecisionRecall;
+import nettester.parsing.Parser;
+import nettester.ui.PrecisionRecall;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class DatasetTester {
     public static final String TEST_FILE = "large_robot.csv"; //ground truth annotations
     public static final String VIS_DIRECTORY = "vis/"; //output directory for debug visualizations
     public static final String IMAGE_DIRECTORY = "../RobotData/large_robot/large_robot_jpg/"; //input directory for dataset images
-    public static final String PNG_IMAGE_DIRECTORY = "../RobotData/large_robot/large_robot/ssdsdsd/"; //input directory for dataset images png format
+    public static final String PNG_IMAGE_DIRECTORY = "../RobotData/large_robot/large_robot/"; //input directory for dataset images png format
     public static final String VIS_CLASS = "ball"; //class which will be visualized, if empty -> no visualization
     public static final int MAX_VIS = 200;
     

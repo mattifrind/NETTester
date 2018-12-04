@@ -1,4 +1,4 @@
-package datasettester;
+package nettester;
 
 import java.awt.Rectangle;
 import javafx.util.Pair;
@@ -15,6 +15,10 @@ public class BoundingBox {
     private double prob = 0.0;
     private String clasz = "";
 
+    /**
+     *
+     * @return
+     */
     public double getX() {
         return x;
     }

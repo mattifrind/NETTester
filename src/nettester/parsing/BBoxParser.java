@@ -1,7 +1,7 @@
-package datasettester.parsing;
+package nettester.parsing;
 
-import datasettester.BoundingBox;
-import datasettester.DatasetTester;
+import nettester.BoundingBox;
+import nettester.DatasetTester;
 import java.awt.Rectangle;
 
 /**

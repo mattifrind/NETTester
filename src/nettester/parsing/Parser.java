@@ -1,8 +1,8 @@
-package datasettester.parsing;
+package nettester.parsing;
 
-import datasettester.BoundingBox;
-import datasettester.DatasetTester;
-import datasettester.Image;
+import nettester.BoundingBox;
+import nettester.DatasetTester;
+import nettester.Image;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

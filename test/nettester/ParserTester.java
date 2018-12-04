@@ -1,7 +1,8 @@
-package datasettester;
+package nettester;
 
-import datasettester.parsing.Parser;
-import datasettester.parsing.BBoxParser;
+import nettester.Image;
+import nettester.parsing.Parser;
+import nettester.parsing.BBoxParser;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;

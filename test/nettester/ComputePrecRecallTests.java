@@ -1,5 +1,10 @@
-package datasettester;
+package nettester;
 
+import nettester.Image;
+import nettester.ImageStatistic;
+import nettester.BoundingBox;
+import nettester.Visualize;
+import nettester.DatasetTester;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

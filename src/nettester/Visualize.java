@@ -1,6 +1,6 @@
-package datasettester;
+package nettester;
 
-import static datasettester.DatasetTester.IMAGE_DIRECTORY;
+import static nettester.DatasetTester.IMAGE_DIRECTORY;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import static datasettester.DatasetTester.VIS_DIRECTORY;
+import static nettester.DatasetTester.VIS_DIRECTORY;
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.util.List;

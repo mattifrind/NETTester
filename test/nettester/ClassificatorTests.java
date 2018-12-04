@@ -1,5 +1,9 @@
-package datasettester;
+package nettester;
 
+import nettester.Image;
+import nettester.Classificator;
+import nettester.Classification;
+import nettester.BoundingBox;
 import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;

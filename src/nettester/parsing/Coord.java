@@ -1,4 +1,4 @@
-package datasettester.parsing;
+package nettester.parsing;
 
 /**
  * Coordinates used in Triangulation.java

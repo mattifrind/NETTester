@@ -1,4 +1,4 @@
-package datasettester;
+package nettester;
 
 /**
  * Represents the counts of the detection classifications of an image 

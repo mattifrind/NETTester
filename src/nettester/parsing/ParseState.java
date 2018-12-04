@@ -1,4 +1,4 @@
-package datasettester.parsing;
+package nettester.parsing;
 
 /**
  * Contains the different states which are used for parsing.

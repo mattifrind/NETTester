@@ -1,9 +1,10 @@
-package datasettester.ui;
+package nettester.ui;
 
-import datasettester.PrecRecResult;
-import datasettester.Result;
+import nettester.PrecRecResult;
+import nettester.Result;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.application.Application;
@@ -37,6 +38,13 @@ public class PrecisionRecall extends Application {
         TabPane pane = new TabPane(getBallTab(), getFootTab());
         pane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         Scene scene  = new Scene(pane,800,600);
+        URL url = this.getClass().getResource("style.css");
+        if (url == null) {
+            System.out.println("Resource not found. Aborting.");
+            System.exit(-1);
+        }
+        String css = url.toExternalForm(); 
+        scene.getStylesheets().add(css);
         primaryStage.setTitle("Precision-Recall");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -108,7 +116,7 @@ public class PrecisionRecall extends Application {
         //creating the chart
         final LineChart<Number,Number> lineChart = new LineChart<>(xAxis,yAxis);
         lineChart.setTitle("Precision(Recall) - " + title);     
-        lineChart.setCreateSymbols(false);
+        lineChart.setCreateSymbols(true);
         
         if(title.equalsIgnoreCase("ball")) {
             addBallSeries(lineChart, values);
