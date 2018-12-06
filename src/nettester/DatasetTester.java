@@ -25,7 +25,7 @@ public class DatasetTester {
     public static final String VIS_DIRECTORY = "vis/"; //output directory for debug visualizations
     public static final String IMAGE_DIRECTORY = "../RobotData/large_robot/large_robot_jpg/"; //input directory for dataset images
     public static final String PNG_IMAGE_DIRECTORY = "../RobotData/large_robot/large_robot/"; //input directory for dataset images png format
-    public static final String VIS_CLASS = "ball"; //class which will be visualized, if empty -> no visualization
+    public static final String VIS_CLASS = ""; //class which will be visualized, if empty -> no visualization
     public static final int MAX_VIS = 200;
     
     
@@ -52,7 +52,7 @@ public class DatasetTester {
         
         //starts the GUI (chart)
         Thread thread = new Thread(() -> {
-            PrecisionRecall.start(Arrays.asList(apscore.get(0), apscore.get(2), apscore.get(3)));
+            PrecisionRecall.start(Arrays.asList(apscore.get(0), apscore.get(2), apscore.get(3), apscore.get(4), apscore.get(5)));
         });
         thread.start();
         System.out.println("AVERAGE RESULTS");

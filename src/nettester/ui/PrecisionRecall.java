@@ -113,6 +113,7 @@ public class PrecisionRecall extends Application {
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("recall");
         yAxis.setLabel("precision");
+        yAxis.setAutoRanging(false);
         //creating the chart
         final LineChart<Number,Number> lineChart = new LineChart<>(xAxis,yAxis);
         lineChart.setTitle("Precision(Recall) - " + title);     
@@ -120,8 +121,14 @@ public class PrecisionRecall extends Application {
         
         if(title.equalsIgnoreCase("ball")) {
             addBallSeries(lineChart, values);
+            yAxis.setUpperBound(1.05);
+            yAxis.setLowerBound(0.5);
+            yAxis.setTickUnit(0.05);
         } else {
             addFootSeries(lineChart, values);
+            yAxis.setUpperBound(1.05);
+            yAxis.setLowerBound(0.2);
+            yAxis.setTickUnit(0.05);
         }
         
         return lineChart;
@@ -151,6 +158,22 @@ public class PrecisionRecall extends Application {
             series3.getData().add(new XYChart.Data(e.getKey(), e.getValue()));
         });
         chart.getData().add(series3); 
+        
+        //IoU 0.4
+        XYChart.Series series4 = new XYChart.Series();
+        series4.setName("IoU=40%");
+        values.get(3).getPrecRecResult().forEach(e -> {
+            series4.getData().add(new XYChart.Data(e.getKey(), e.getValue()));
+        });
+        chart.getData().add(series4); 
+        
+        //IoU 0.5
+        XYChart.Series series5 = new XYChart.Series();
+        series5.setName("IoU=50%");
+        values.get(4).getPrecRecResult().forEach(e -> {
+            series5.getData().add(new XYChart.Data(e.getKey(), e.getValue()));
+        });
+        chart.getData().add(series5);
     }
     
     private void addFootSeries(LineChart chart, List<PrecRecResult> values) {

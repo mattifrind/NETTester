@@ -6,6 +6,8 @@
 .default-color0.chart-series-line { -fx-stroke: rgba(66, 165, 245, 0.3)} /* blue */
 .default-color1.chart-series-line { -fx-stroke: rgba(239, 83, 80, 0.3)} /* red */
 .default-color2.chart-series-line { -fx-stroke: rgba(0, 137, 123, 0.3)} /* teal */
+.default-color3.chart-series-line { -fx-stroke: rgba(245,124,0, 0.3)} /* orange */
+.default-color4.chart-series-line { -fx-stroke: rgba(40,53,147, 0.3)} /* dark blue */
 
 .default-color0.chart-line-symbol { 
     -fx-background-color: transparent, rgb(66, 165, 245); 
@@ -15,4 +17,10 @@
 }
 .default-color2.chart-line-symbol { 
     -fx-background-color: transparent, rgb(0, 137, 123); 
+}
+.default-color3.chart-line-symbol { 
+    -fx-background-color: transparent, rgb(245,124,0); 
+}
+.default-color4.chart-line-symbol { 
+    -fx-background-color: transparent, rgb(40,53,147); 
 }
