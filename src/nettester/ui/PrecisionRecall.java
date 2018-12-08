@@ -114,6 +114,7 @@ public class PrecisionRecall extends Application {
         xAxis.setLabel("recall");
         yAxis.setLabel("precision");
         yAxis.setAutoRanging(false);
+        xAxis.setAutoRanging(false);
         //creating the chart
         final LineChart<Number,Number> lineChart = new LineChart<>(xAxis,yAxis);
         lineChart.setTitle("Precision(Recall) - " + title);     
@@ -124,11 +125,17 @@ public class PrecisionRecall extends Application {
             yAxis.setUpperBound(1.05);
             yAxis.setLowerBound(0.5);
             yAxis.setTickUnit(0.05);
+            xAxis.setUpperBound(0.65);
+            xAxis.setLowerBound(0);
+            xAxis.setTickUnit(0.05);
         } else {
             addFootSeries(lineChart, values);
             yAxis.setUpperBound(1.05);
             yAxis.setLowerBound(0.2);
             yAxis.setTickUnit(0.05);
+            xAxis.setUpperBound(0.275);
+            xAxis.setLowerBound(0);
+            xAxis.setTickUnit(0.025);
         }
         
         return lineChart;

@@ -1,7 +1,7 @@
 package nettester.parsing;
 
 import nettester.BoundingBox;
-import nettester.DatasetTester;
+import nettester.NETTester;
 import nettester.Image;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -41,7 +41,7 @@ public class Parser {
      * @throws IOException
      */
     public Map<String, Image> readTest() throws FileNotFoundException, IOException {
-        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//" + DatasetTester.TEST_FILE))) {
+        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//" + NETTester.TEST_FILE))) {
             return parseTestData(traindata);
         }
     }
@@ -52,7 +52,7 @@ public class Parser {
      * @throws IOException
      */
     public Map<String, Image> readDetections() throws IOException {
-        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//" + DatasetTester.DET_FILE))) {
+        try (final BufferedReader traindata = new BufferedReader(new FileReader("data//" + NETTester.DET_FILE))) {
             return parseDetections(traindata);
         }
     }

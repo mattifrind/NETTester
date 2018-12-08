@@ -17,15 +17,15 @@ import javafx.util.Pair;
  * Computes Precall-Recall-Pairs and the mAP.
  * @author Matti J. Frind
  */
-public class DatasetTester {
+public class NETTester {
     
-    public static int annotationVersion = 3; //1-joined foots, 2-seperated foot, 3-robot
-    public static final String DET_FILE = "train3_detectionsNEW.txt"; //train2 needs annotationVersion=2 -> train3=3
+    public static int annotationVersion = 2; //1-joined foots, 2-seperated foot, 3-robot
+    public static final String DET_FILE = "train2_detections.txt"; //train2 needs annotationVersion=2 -> train3=3
     public static final String TEST_FILE = "large_robot.csv"; //ground truth annotations
     public static final String VIS_DIRECTORY = "vis/"; //output directory for debug visualizations
     public static final String IMAGE_DIRECTORY = "../RobotData/large_robot/large_robot_jpg/"; //input directory for dataset images
     public static final String PNG_IMAGE_DIRECTORY = "../RobotData/large_robot/large_robot/"; //input directory for dataset images png format
-    public static final String VIS_CLASS = ""; //class which will be visualized, if empty -> no visualization
+    public static final String VIS_CLASS = "ball"; //class which will be visualized, if empty -> no visualization ("ball" or "foot")
     public static final int MAX_VIS = 200;
     
     
@@ -55,10 +55,6 @@ public class DatasetTester {
             PrecisionRecall.start(Arrays.asList(apscore.get(0), apscore.get(2), apscore.get(3), apscore.get(4), apscore.get(5)));
         });
         thread.start();
-        System.out.println("AVERAGE RESULTS");
-        System.out.println("Ball mAP: " + formatOutput(getListSum(sum).getKey()/11));
-        System.out.println("Foot mAP: " + formatOutput(getListSum(sum).getValue()/11));
-        System.out.println("mAP: " + formatOutput((getListSum(sum).getKey() + getListSum(sum).getValue())/22));
     }
     
     /**
@@ -79,7 +75,6 @@ public class DatasetTester {
         double footAP = mc.computeMean(apscore.get(apscore.size()-1).getFootResult());
         System.out.println("Ball " + Math.round(iou_thresh*100) + "-AP: " + formatOutput(ballAP));
         System.out.println("Foot " + Math.round(iou_thresh*100) + "-AP: " + formatOutput(footAP));
-        System.out.println(Math.round(iou_thresh*100) + "-mAP: " + formatOutput(((ballAP + footAP) / 2)));
         return new Pair<>(ballAP, footAP);
     }
     
@@ -261,7 +256,7 @@ public class DatasetTester {
             }
             System.out.println("Reading Detections Data...");
             Map<String, Image> detectionData = parser.readDetections();
-            new DatasetTester().computeMean(detectionData, testData);
+            new NETTester().computeMean(detectionData, testData);
         } catch (Throwable ex) {
             ex.printStackTrace();
         }

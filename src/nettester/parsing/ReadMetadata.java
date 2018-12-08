@@ -1,7 +1,7 @@
 package nettester.parsing;
 
-import nettester.DatasetTester;
-import static nettester.DatasetTester.PNG_IMAGE_DIRECTORY;
+import nettester.NETTester;
+import static nettester.NETTester.PNG_IMAGE_DIRECTORY;
 import java.io.File;
 import java.util.Iterator;
 import javax.imageio.ImageIO;
@@ -54,11 +54,11 @@ public class ReadMetadata {
             } catch (IllegalArgumentException ex) {
                 errors++;
                 //System.err.print(ex);
-                DatasetTester.version3Availability = false;
+                NETTester.version3Availability = false;
             }
         }
         catch (Exception e) {
-            DatasetTester.version3Availability = false;
+            NETTester.version3Availability = false;
         }
         if(pitch==pitch&&roll==roll){
             //camAnglesAvailable=true;

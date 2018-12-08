@@ -1,6 +1,6 @@
 package nettester;
 
-import static nettester.DatasetTester.IMAGE_DIRECTORY;
+import static nettester.NETTester.IMAGE_DIRECTORY;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import static nettester.DatasetTester.VIS_DIRECTORY;
+import static nettester.NETTester.VIS_DIRECTORY;
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.util.List;
@@ -24,15 +24,17 @@ public class Visualize {
     
     public void visualizeBBoxes(String image, List<BoundingBox> gt, List<BoundingBox> dets, ImageStatistic is, String selectedClass, double thresh, double iou_thresh) {
         BufferedImage bimage = new BufferedImage(640, 480, BufferedImage.TYPE_BYTE_INDEXED);
+        Graphics2D g2d = bimage.createGraphics();
         try {
             bimage = ImageIO.read(new File(IMAGE_DIRECTORY + image + ".jpg"));
         } catch (IOException ex) {
-            Logger.getLogger(Visualize.class.getName()).log(Level.SEVERE, null, ex);
+            NETTester.version3Availability = false;
+            g2d.setColor(Color.white);
+            g2d.fillRect(0, 0, 640, 480);
         }
 
-        Graphics2D g2d = bimage.createGraphics();
-        //g2d.setColor(Color.white);
-        //g2d.fillRect(0, 0, 640, 480);
+        
+        
         g2d.setColor(Color.red);
         g2d.setStroke(new BasicStroke(2));
         g2d.setFont(new Font("Roboto Light", 0, 15));

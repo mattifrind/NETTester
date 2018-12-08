@@ -4,7 +4,7 @@ import nettester.Image;
 import nettester.ImageStatistic;
 import nettester.BoundingBox;
 import nettester.Visualize;
-import nettester.DatasetTester;
+import nettester.NETTester;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +18,7 @@ import org.junit.Test;
 public class ComputePrecRecallTests {
     @Test
     public void testPositives() {
-        DatasetTester tester = new DatasetTester();
+        NETTester tester = new NETTester();
         Visualize vis = new Visualize();
         
         Image img = createSimpleGT();

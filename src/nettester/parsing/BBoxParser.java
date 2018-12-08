@@ -1,7 +1,7 @@
 package nettester.parsing;
 
 import nettester.BoundingBox;
-import nettester.DatasetTester;
+import nettester.NETTester;
 import java.awt.Rectangle;
 
 /**
@@ -14,13 +14,13 @@ public class BBoxParser {
     private static final int MIN_LENGTH = 8;
     
     public static BoundingBox[] readFootBBox(String x1String, String y1String, String x2String, String y2String, String clasz, double[] metadata) {
-        switch (DatasetTester.annotationVersion) {
+        switch (NETTester.annotationVersion) {
             case 1:
                 return readBBox1(x1String, y1String, x2String, y2String, clasz);
             case 2:
                 return readBBox2(x1String, y1String, x2String, y2String, clasz);
             case 3:
-                if (DatasetTester.version3Availability) {
+                if (NETTester.version3Availability) {
                     return readBBox3(x1String, y1String, x2String, y2String, clasz, metadata);
                 } else {
                     return readBBox2(x1String, y1String, x2String, y2String, clasz);
