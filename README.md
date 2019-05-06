@@ -1,7 +1,7 @@
 # NETTester
 **Written by Matti J. Frind.**
 The **NETTester** computes various Average Precisions for the classes “ball” and “foot” and visualizes the precision and recall values in charts.
-Open the project in **Netbeans**. When you start the application the software will read the ground truth data and the detections from different files. After the computation of the APs at different IoU thresholds the application will print the results in the output and open a window with the precall-recall charts of the two classes. In the (exported) <strong>Javadoc</strong> you get more information about the structure of the software.</p>
+Open the project in **Netbeans**. When you start the application the software will read the ground truth data and the detections from different files. After the computation of the APs at different IoU thresholds the application will print the results in the output and open a window with the precall-recall charts of the two classes. In the (exported) <strong>Javadoc</strong> you get more information about the structure of the software.
 ## Settings
 At the top of the main class (NETTester.java) you can change some settings.
 * **annotationVersion**: changes the way the ground truth data will be interpreted. The detections file *train2_detections.txt* needs the annotationVersion 2. *train3_detections.txt* needs annotationVersion 3.
@@ -15,6 +15,3 @@ At the top of the main class (NETTester.java) you can change some settings.
 * when the jpg images are not available the debug visualization will painted on a white background
 In the end you should get a chart like this:
 ![PrecRecall-Ball.png](PrecRecall-Ball.png "PrecRecall-Ball.png")
-<img src="PrecRecall-Ball.png" alt="example chart"></p>
-
-</body></html>
